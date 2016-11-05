@@ -42,12 +42,14 @@ function register (angular) {
         dropIndex = domIndexOf(dropElm, target);
         scope.$applyAsync(function applyDrop() {
           sourceModel = drake.models[drake.containers.indexOf(source)];
+          var dropElmModel;
           if (target === source) {
             sourceModel.splice(dropIndex, 0, sourceModel.splice(dragIndex, 1)[0]);
+            dropElmModel = sourceModel[dragIndex];
           } else {
             var notCopy = dragElm === dropElm;
             var targetModel = drake.models[drake.containers.indexOf(target)];
-            var dropElmModel = notCopy ? sourceModel[dragIndex] : angular.copy(sourceModel[dragIndex]);
+            dropElmModel = notCopy ? sourceModel[dragIndex] : angular.copy(sourceModel[dragIndex]);
 
             if (notCopy) {
               sourceModel.splice(dragIndex, 1);
@@ -55,7 +57,7 @@ function register (angular) {
             targetModel.splice(dropIndex, 0, dropElmModel);
             target.removeChild(dropElm); // element must be removed for ngRepeat to apply correctly
           }
-          drake.emit('drop-model', dropElm, target, source);
+          drake.emit('drop-model', dropElm, target, source, dropElmModel);
         });
       });
       drake.registered = true;
