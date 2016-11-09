@@ -49,6 +49,20 @@ function register (angular) {
 
         dragulaService.handleModels(dragulaScope, drake);
       });
+
+      scope.$on('$destroy', function() {
+        var containerIndex = drake.containers.indexOf(container);
+        if (containerIndex >= 0) {
+          drake.containers.splice(containerIndex, 1);
+        }
+        if(drake.models) {
+          var modelIndex = drake.models.indexOf(scope.dragulaModel);
+          if (modelIndex >= 0) {
+            drake.models.splice(modelIndex, 1);
+          }
+        }
+      });
+
     }
   }];
 }
